@@ -11,10 +11,10 @@ public class MainController {
 		return "index";
 	}
 	
-	@GetMapping("/login")
-	public String showLogin() {
-		return "login";
-	}
+//	@GetMapping("/login")
+//	public String showLogin() {
+//		return "login";
+//	}
 	
 	@GetMapping("/registration")
 	public String showRegistration() {

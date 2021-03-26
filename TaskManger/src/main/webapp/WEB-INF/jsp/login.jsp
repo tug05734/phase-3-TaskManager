@@ -14,6 +14,7 @@
 		<label for="password">Password:</label>
 		<input type="text" placeholder="Password" id="password" name="password"><br><br> 
 		<br> <input type="submit" value="Login"><br><br>
+		<p style="color:red">${errorMessage}</p><br>
 	</form>
 </body>
 </html>
