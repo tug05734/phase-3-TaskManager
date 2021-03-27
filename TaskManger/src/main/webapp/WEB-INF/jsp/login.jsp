@@ -8,6 +8,7 @@
 </head>
 <body>
 	<h2>Login</h2>
+	<p style="color:green">${message}</p><br>
 	<form action="/login" method="POST">
 		<label for="email">E-mail:</label>
 		<input type="text" placeholder="E-mail" id="email" name="email"><br><br>

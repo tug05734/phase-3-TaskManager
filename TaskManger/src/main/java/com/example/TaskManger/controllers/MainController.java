@@ -16,10 +16,10 @@ public class MainController {
 //		return "login";
 //	}
 	
-	@GetMapping("/registration")
-	public String showRegistration() {
-		return "registration";
-	}
+//	@GetMapping("/registration")
+//	public String showRegistration() {
+//		return "registration";
+//	}
 	
 	@GetMapping("/home")
 	public String showHome() {

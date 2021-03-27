@@ -39,4 +39,32 @@ public class UserController {
 		return "login";
 	}
 	
+	@GetMapping("/registration")
+	public String showRegistration() {
+		return "registration";
+	}
+	
+	@PostMapping("/registration")
+	public String registerUser(ModelMap model, @RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("password") String password, @RequestParam("password1") String password1) throws InterruptedException {
+		
+		if(name.isBlank() || email.isBlank() || password.isBlank() || password1.isBlank()) {
+			model.addAttribute("errorMessage", "Please enter all fields");
+			return "registration";
+		}else {
+			if(!password.equals(password1)) {
+				model.addAttribute("errorMessage", "Passwords do not match!");
+				return "registration";
+			}else {
+				User user = new User();
+				user.setName(name);
+				user.setEmail(email);
+				user.setPassword(password);
+				userService.registerUser(user);
+				model.addAttribute("message", "Congratulations, you're account has been registered!");
+				return "login";
+			}
+		}
+	}
+	
+	
 }

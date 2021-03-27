@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.example.TaskManger.entities.Task;
-import com.example.TaskManger.entities.User;
 
 public interface TaskRepository extends CrudRepository<Task, Integer>{
 	

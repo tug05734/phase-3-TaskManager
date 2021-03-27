@@ -19,5 +19,6 @@
 		<input type="password" placeholder="Confirm Password" id="password1" name="password1"><br><br>  
 		<br> <input type="submit" value="Register"><br><br>
 	</form>
+	<p style="color:red">${errorMessage}</p><br>
 </body>
 </html>
