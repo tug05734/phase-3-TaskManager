@@ -33,4 +33,16 @@ public class TaskService {
 		
 		return(taskRepository.findAllByUser(user.getId()));
 	}
+	
+	public void addNewTask(Task task) {
+		taskRepository.save(task);
+	}
+	
+	public void deleteTask(int id) {
+		taskRepository.deleteById(id);
+	}
+	
+	public void updateTask(Task task) {
+		taskRepository.save(task);
+	}
 }

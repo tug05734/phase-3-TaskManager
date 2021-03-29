@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.TaskManger.entities.User;
@@ -16,6 +18,8 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	protected static User user;
+	
 	@GetMapping("/login")
 	public String showForm(ModelMap model) {
 		return "login";
@@ -25,9 +29,11 @@ public class UserController {
 	public String checkAuthentication(ModelMap model, @RequestParam("email") String email, @RequestParam("password") String password) {
 		
 		if(!email.isBlank() && !password.isBlank()) {
-			User user = userService.getUserByEmail(email);
+			user = userService.getUserByEmail(email);
 			if(user.getPassword().equals(password)) {
-				model.addAttribute("user", user.getName());
+				model.addAttribute("userName", user.getName());
+				model.addAttribute("userEmail", user.getEmail());
+				model.addAttribute("userPassword", user.getPassword());
 				return "home";
 			}else {
 				model.addAttribute("errorMessage", "Entered E-mail or Password was incorrect");

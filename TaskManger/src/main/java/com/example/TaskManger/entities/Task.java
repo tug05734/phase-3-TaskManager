@@ -42,7 +42,10 @@ public class Task {
 	@JoinColumn(name="user_id")
 	private User user;
 	   
-	   
+	public Task() {
+		
+	}
+	
 	public Task(String name, String description, String email, Date startDate, Date endDate, String severity, User user) {
 		super();
 		this.name = name;
