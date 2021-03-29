@@ -2,6 +2,8 @@ package com.example.TaskManger.controllers;
 
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,16 +51,20 @@ public class TaskController extends UserController {
 			@RequestParam("enddate") @DateTimeFormat(pattern="yyyy-MM-dd") Date endDate, @RequestParam("severity") String severity, @RequestParam("description") String description) {
 		
 		if(!name.isBlank() && !email.isBlank() && startDate != null && !endDate.toString().isBlank() && !severity.isBlank()) {
-			Task task = new Task();
-			task.setName(name);
-			task.setEmail(email);
-			task.setDescription(description);
-			task.setStartDate(startDate);
-			task.setEndDate(endDate);
-			task.setSeverity(severity);
-			task.setUserId(user);
-			taskService.addNewTask(task);
-			return "success";
+			if(!startDate.after(endDate)) {
+				Task task = new Task();
+				task.setName(name);
+				task.setEmail(email);
+				task.setDescription(description);
+				task.setStartDate(startDate);
+				task.setEndDate(endDate);
+				task.setSeverity(severity);
+				task.setUserId(user);
+				taskService.addNewTask(task);
+				return "success";
+			}else {
+				model.addAttribute("errorMessage", "The end date must be on or after the start date");
+			}
 		}else {
 			model.addAttribute("errorMessage", "Must enter all fields");
 		}
@@ -97,22 +105,28 @@ public class TaskController extends UserController {
 			@RequestParam("enddate") @DateTimeFormat(pattern="yyyy-MM-dd") Date endDate, @RequestParam("severity") String severity, @RequestParam("description") String description) {
 		
 		if(!id.isBlank() && !name.isBlank() && !email.isBlank() && startDate != null && !endDate.toString().isBlank() && !severity.isBlank()) {
-			Task task = new Task();
-			task.setId(Integer.parseInt(id));
-			task.setName(name);
-			task.setEmail(email);
-			task.setDescription(description);
-			task.setStartDate(startDate);
-			task.setEndDate(endDate);
-			task.setSeverity(severity);
-			task.setUserId(user);
-			taskService.updateTask(task);
-			return "success";
+			if(!startDate.after(endDate)) {
+				Task task = new Task();
+				task.setId(Integer.parseInt(id));
+				task.setName(name);
+				task.setEmail(email);
+				task.setDescription(description);
+				task.setStartDate(startDate);
+				task.setEndDate(endDate);
+				task.setSeverity(severity);
+				task.setUserId(user);
+				taskService.addNewTask(task);
+				return "success";
+			}else {
+				model.addAttribute("errorMessage", "The end date must be on or after the start date");
+			}
 		}else {
 			model.addAttribute("errorMessage", "Must enter all fields");
 		}
 		
 		return "updatetask";
 	}
+	
+	
 	
 }

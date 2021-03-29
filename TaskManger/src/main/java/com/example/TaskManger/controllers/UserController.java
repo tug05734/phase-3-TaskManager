@@ -1,13 +1,19 @@
 package com.example.TaskManger.controllers;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.example.TaskManger.entities.User;
 import com.example.TaskManger.services.UserService;
@@ -30,19 +36,29 @@ public class UserController {
 		
 		if(!email.isBlank() && !password.isBlank()) {
 			user = userService.getUserByEmail(email);
-			if(user.getPassword().equals(password)) {
-				model.addAttribute("userName", user.getName());
-				model.addAttribute("userEmail", user.getEmail());
-				model.addAttribute("userPassword", user.getPassword());
-				return "home";
+			if(user != null) {
+				if(user.getPassword().equals(password)) {
+					model.addAttribute("userName", user.getName());
+					model.addAttribute("userEmail", user.getEmail());
+					model.addAttribute("userPassword", user.getPassword());
+					return "home";
+				}else {
+					model.addAttribute("errorMessage", "Entered E-mail or Password was incorrect");
+				}
 			}else {
-				model.addAttribute("errorMessage", "Entered E-mail or Password was incorrect");
+				model.addAttribute("errorMessage", "User not found!");
 			}
 		}else {
 			model.addAttribute("errorMessage","You must enter both E-mail and Password");
 		}
 		
 		return "login";
+	}
+	
+	@GetMapping("/logout")
+	public String logout() {
+		user = null;
+		return "index";
 	}
 	
 	@GetMapping("/registration")
@@ -72,5 +88,48 @@ public class UserController {
 		}
 	}
 	
+	@ExceptionHandler(MissingServletRequestParameterException.class)
+	public ModelAndView handleMissingParams(HttpServletRequest request, MissingServletRequestParameterException ex) {
+	    String name = ex.getParameterName();
+	    System.out.println(name + " parameter is missing");
+	    ModelAndView mav = new ModelAndView("failure");
+	    mav.addObject("exceptionError", "Start date and/or end date fields are missing");
+	    // Actual exception handling
+	    //model.addAttribute("exceptionError", "Start date and/or end date fields are missing");
+	    return mav;
+	    
+	}
 	
+	@ExceptionHandler(NullPointerException.class)
+	public ModelAndView handleNullUser(HttpServletRequest request, NullPointerException ex) {
+		
+		String name = ex.getLocalizedMessage();
+	    System.out.println(name);
+		ModelAndView mav = new ModelAndView("failure");
+		mav.addObject("exceptionError", name  + ". <br><br>If user is null please <a href='/login'>login</a> again.");
+		
+		return mav;
+	}
+	
+	@ExceptionHandler(EmptyResultDataAccessException.class)
+	public ModelAndView handleDataNotFound(HttpServletRequest request, EmptyResultDataAccessException ex) {
+		
+		String name = ex.getLocalizedMessage();
+	    System.out.println(name);
+		ModelAndView mav = new ModelAndView("failure");
+		mav.addObject("exceptionError", name  + ". <br><br>You must enter a valid task ID!");
+		
+		return mav;
+	}
+	
+	@ExceptionHandler(NumberFormatException.class)
+	public ModelAndView handleDataNotFound(HttpServletRequest request, NumberFormatException ex) {
+		
+		String name = ex.getLocalizedMessage();
+	    System.out.println(name);
+		ModelAndView mav = new ModelAndView("failure");
+		mav.addObject("exceptionError", name  + ". <br><br>Invalid input for a field. Make sure no letters are present in fields that require numerical input");
+		
+		return mav;
+	}
 }

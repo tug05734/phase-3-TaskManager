@@ -16,7 +16,7 @@
 		<li><a href="/tasks/createtask">Create Task</a></li>
 		<li><a href="/tasks/deletetask">Delete Task</a></li>
 		<li><a href="/tasks/updatetask">Update Task</a></li>
+		<li><a href="/logout">Logout</a>
 	</ul>
-	<br><p hidden>${userEmail}${userPassword} </p>
 </body>
 </html>

@@ -13,7 +13,6 @@
 	If you are not, don't worry! You can register <a href="/registration">here</a>!<br><br>
 	<a href="/login">Login</a><br>
 	<a href="/registration">Register</a><br>
-	<a href="/home">home</a>
 	</p>
 </body>
 </html>
