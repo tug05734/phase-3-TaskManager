@@ -1,5 +1,7 @@
 package com.example.TaskManger.controllers;
 
+import java.util.NoSuchElementException;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,6 +131,17 @@ public class UserController {
 	    System.out.println(name);
 		ModelAndView mav = new ModelAndView("failure");
 		mav.addObject("exceptionError", name  + ". <br><br>Invalid input for a field. Make sure no letters are present in fields that require numerical input");
+		
+		return mav;
+	}
+	
+	@ExceptionHandler(NoSuchElementException.class)
+	public ModelAndView handleNoSuchElementException(HttpServletRequest request, NoSuchElementException ex) {
+		
+		String name = ex.getLocalizedMessage();
+	    System.out.println(name);
+		ModelAndView mav = new ModelAndView("failure");
+		mav.addObject("exceptionError", name + " for the entered ID");
 		
 		return mav;
 	}

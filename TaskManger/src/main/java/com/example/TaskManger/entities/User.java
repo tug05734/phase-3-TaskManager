@@ -38,8 +38,8 @@ public class User {
     	this.email = email;
     	this.password = password;
     }
-    
-    public boolean isEmpty() {
+
+	public boolean isEmpty() {
     	if(this.getId() == 0)
     		return true;
     	

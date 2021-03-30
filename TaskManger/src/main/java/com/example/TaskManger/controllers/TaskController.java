@@ -83,8 +83,14 @@ public class TaskController extends UserController {
 	public String deleteTask(ModelMap model, @RequestParam("id") String id) {
 		
 		if(!id.isBlank()) {
-			taskService.deleteTask(Integer.parseInt(id));
-			return "success";
+			Task task = new Task();
+			task = taskService.GetTaskById(Integer.parseInt(id)).get();
+			if(task.getUser().getId() == user.getId()) {
+				taskService.deleteTask(Integer.parseInt(id));
+				return "success";
+			}else {
+				model.addAttribute("errorMessage", "Task not found!");
+			}
 		}else {
 			model.addAttribute("errorMessage", "Must enter ID");
 		}
